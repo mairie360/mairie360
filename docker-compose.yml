@@ -40,13 +40,13 @@ services:
       timeout: 5s
       retries: 5
 
-  core-api:
-    image: ghcr.io/mairie360/core-api:latest
+  core:
+    image: ghcr.io/mairie360/core:latest
     pull_policy: always
     restart: always
     environment:
-      BINDING_ADDRESS: "0.0.0.0"
-      BINDING_PORT: 3000
+      HOSTNAME: "0.0.0.0"
+      PORT: 3000
       POSTGRES_URL: postgresql://postgres:postgres@postgres:5432/core
       REDIS_URL: redis://redis:6379
     expose:
@@ -59,113 +59,52 @@ services:
       redis:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://127.0.0.1:3000/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  core-web:
-    image: ghcr.io/mairie360/core-web:latest
-    pull_policy: always
-    restart: always
-    environment:
-      HOSTNAME: "0.0.0.0"
-      PORT: 3000
-      API_URL: http://localhost:80/api/core
-    expose:
-      - "3000"
-    networks:
-      - default
-    depends_on:
-      nginx-api:
-        condition: service_healthy
-    healthcheck:
       test: ["CMD", "curl", "-f", "http://127.0.0.1:3000/api/health"]
       interval: 10s
       timeout: 5s
       retries: 5
 
-  files-api:
-    image: ghcr.io/mairie360/files-api:latest
+  files:
+    image: ghcr.io/mairie360/files:latest
     pull_policy: always
     restart: always
     environment:
-      BINDING_ADDRESS: "0.0.0.0"
-      BINDING_PORT: 3000
+      HOSTNAME: "0.0.0.0"
+      PORT: 3000
       POSTGRES_URL: postgresql://postgres:postgres@postgres:5432/files
       REDIS_URL: redis://redis:6379
-      CORE_API_URL: http://localhost:80/api/core
     expose:
       - "3000"
     networks:
       - default
     depends_on:
-      core-api:
+      postgres:
         condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://127.0.0.1:3000/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  files-web:
-    image: ghcr.io/mairie360/files-web:latest
-    pull_policy: always
-    restart: always
-    environment:
-      HOSTNAME: "0.0.0.0"
-      PORT: 3000
-      API_URL: http://localhost:80/api/files
-    expose:
-      - "3000"
-    networks:
-      - default
-    depends_on:
-      nginx-api:
+      redis:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://127.0.0.1:3000/api/health"]
       interval: 10s
       timeout: 5s
       retries: 5
-  
-  calendars-api:
-    image: ghcr.io/mairie360/calendars-api:latest
+
+  calendars:
+    image: ghcr.io/mairie360/calendars:latest
     pull_policy: always
     restart: always
     environment:
-      BINDING_ADDRESS: "0.0.0.0"
-      BINDING_PORT: 3000
+      HOSTNAME: "0.0.0.0"
+      PORT: 3000
       POSTGRES_URL: postgresql://postgres:postgres@postgres:5432/calendars
       REDIS_URL: redis://redis:6379
-      CORE_API_URL: http://localhost:80/api/core
     expose:
       - "3000"
     networks:
       - default
     depends_on:
-      core-api:
+      postgres:
         condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://127.0.0.1:3000/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  calendars-web:
-    image: ghcr.io/mairie360/calendars-web:latest
-    pull_policy: always
-    restart: always
-    environment:
-      HOSTNAME: "0.0.0.0"
-      PORT: 3000
-      API_URL: http://localhost:80/api/calendars
-    expose:
-      - "3000"
-    networks:
-      - default
-    depends_on:
-      nginx-api:
+      redis:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://127.0.0.1:3000/api/health"]
@@ -173,43 +112,23 @@ services:
       timeout: 5s
       retries: 5
 
-  emails-api:
-    image: ghcr.io/mairie360/emails-api:latest
+  emails:
+    image: ghcr.io/mairie360/emails:latest
     pull_policy: always
     restart: always
     environment:
-      BINDING_ADDRESS: "0.0.0.0"
-      BINDING_PORT: 3000
+      HOSTNAME: "0.0.0.0"
+      PORT: 3000
       POSTGRES_URL: postgresql://postgres:postgres@postgres:5432/emails
       REDIS_URL: redis://redis:6379
-      CORE_API_URL: http://localhost:80/api/core
     expose:
       - "3000"
     networks:
       - default
     depends_on:
-      core-api:
+      postgres:
         condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://127.0.0.1:3000/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  emails-web:
-    image: ghcr.io/mairie360/emails-web:latest
-    pull_policy: always
-    restart: always
-    environment:
-      HOSTNAME: "0.0.0.0"
-      PORT: 3000
-      API_URL: http://localhost:80/api/emails
-    expose:
-      - "3000"
-    networks:
-      - default
-    depends_on:
-      nginx-api:
+      redis:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://127.0.0.1:3000/api/health"]
@@ -217,43 +136,23 @@ services:
       timeout: 5s
       retries: 5
 
-  projects-api:
-    image: ghcr.io/mairie360/projects-api:latest
+  projects:
+    image: ghcr.io/mairie360/projects:latest
     pull_policy: always
     restart: always
     environment:
-      BINDING_ADDRESS: "0.0.0.0"
-      BINDING_PORT: 3000
+      HOSTNAME: "0.0.0.0"
+      PORT: 3000
       POSTGRES_URL: postgresql://postgres:postgres@postgres:5432/projects
       REDIS_URL: redis://redis:6379
-      CORE_API_URL: http://localhost:80/api/emails
     expose:
       - "3000"
     networks:
       - default
     depends_on:
-      core-api:
+      postgres:
         condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://127.0.0.1:3000/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  projects-web:
-    image: ghcr.io/mairie360/projects-web:latest
-    pull_policy: always
-    restart: always
-    environment:
-      HOSTNAME: "0.0.0.0"
-      PORT: 3000
-      API_URL: http://localhost:80/api/projects
-    expose:
-      - "3000"
-    networks:
-      - default
-    depends_on:
-      nginx-api:
+      redis:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://127.0.0.1:3000/api/health"]
@@ -261,102 +160,26 @@ services:
       timeout: 5s
       retries: 5
 
-  messages-api:
-    image: ghcr.io/mairie360/messages-api:latest
+  messages:
+    image: ghcr.io/mairie360/messages:latest
     pull_policy: always
     restart: always
     environment:
-      BINDING_ADDRESS: "0.0.0.0"
-      BINDING_PORT: 3000
+      HOSTNAME: "0.0.0.0"
+      PORT: 3000
       POSTGRES_URL: postgresql://postgres:postgres@postgres:5432/messages
       REDIS_URL: redis://redis:6379
-      CORE_API_URL: http://localhost:80/api/messages
     expose:
       - "3000"
     networks:
       - default
     depends_on:
-      core-api:
+      postgres:
         condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://127.0.0.1:3000/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  messages-web:
-    image: ghcr.io/mairie360/messages-web:latest
-    pull_policy: always
-    restart: always
-    environment:
-      HOSTNAME: "0.0.0.0"
-      PORT: 3000
-      API_URL: http://localhost:80/api/messages
-    expose:
-      - "3000"
-    networks:
-      - default
-    depends_on:
-      nginx-api:
+      redis:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://127.0.0.1:3000/api/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  nginx-api:
-    image: nginx:1.27.4-bookworm
-    restart: always
-    expose:
-      - "3000"
-    volumes:
-      - ./nginx-api.conf:/etc/nginx/nginx.conf
-    networks:
-      - default
-    depends_on:
-      core-api:
-        condition: service_healthy
-      files-api:
-        condition: service_healthy
-      calendars-api:
-        condition: service_healthy
-      emails-api:
-        condition: service_healthy
-      projects-api:
-        condition: service_healthy
-      messages-api:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://127.0.0.1:3000/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  nginx-web:
-    image: nginx:1.27.4-bookworm
-    restart: always
-    expose:
-      - "3000"
-    volumes:
-      - ./nginx-web.conf:/etc/nginx/nginx.conf
-    networks:
-      - default
-    depends_on:
-      core-web:
-        condition: service_healthy
-      files-web:
-        condition: service_healthy
-      calendars-web:
-        condition: service_healthy
-      emails-web:
-        condition: service_healthy
-      projects-web:
-        condition: service_healthy
-      messages-web:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://127.0.0.1:3000/health"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -371,7 +194,15 @@ services:
     networks:
       - default
     depends_on:
-      nginx-api:
+      core:
         condition: service_healthy
-      nginx-web:
+      files:
+        condition: service_healthy
+      calendars:
+        condition: service_healthy
+      emails:
+        condition: service_healthy
+      projects:
+        condition: service_healthy
+      messages:
         condition: service_healthy
