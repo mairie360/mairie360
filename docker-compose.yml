@@ -73,14 +73,13 @@ services:
       PORT: 3000
       POSTGRES_URL: postgresql://postgres:postgres@postgres:5432/files
       REDIS_URL: redis://redis:6379
+      CORE_PUBLIC_URL: http://localhost:3000
     expose:
       - "3000"
     networks:
       - default
     depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
+      core:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://127.0.0.1:3000/api/health"]
@@ -97,14 +96,13 @@ services:
       PORT: 3000
       POSTGRES_URL: postgresql://postgres:postgres@postgres:5432/calendars
       REDIS_URL: redis://redis:6379
+      CORE_PUBLIC_URL: http://localhost:3000
     expose:
       - "3000"
     networks:
       - default
     depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
+      core:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://127.0.0.1:3000/api/health"]
@@ -121,14 +119,13 @@ services:
       PORT: 3000
       POSTGRES_URL: postgresql://postgres:postgres@postgres:5432/emails
       REDIS_URL: redis://redis:6379
+      CORE_PUBLIC_URL: http://localhost:3000
     expose:
       - "3000"
     networks:
       - default
     depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
+      core:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://127.0.0.1:3000/api/health"]
@@ -145,14 +142,13 @@ services:
       PORT: 3000
       POSTGRES_URL: postgresql://postgres:postgres@postgres:5432/projects
       REDIS_URL: redis://redis:6379
+      CORE_PUBLIC_URL: http://localhost:3000
     expose:
       - "3000"
     networks:
       - default
     depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
+      core:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://127.0.0.1:3000/api/health"]
@@ -169,14 +165,13 @@ services:
       PORT: 3000
       POSTGRES_URL: postgresql://postgres:postgres@postgres:5432/messages
       REDIS_URL: redis://redis:6379
+      CORE_PUBLIC_URL: http://localhost:3000
     expose:
       - "3000"
     networks:
       - default
     depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
+      core:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://127.0.0.1:3000/api/health"]
@@ -194,8 +189,6 @@ services:
     networks:
       - default
     depends_on:
-      core:
-        condition: service_healthy
       files:
         condition: service_healthy
       calendars:
