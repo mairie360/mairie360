@@ -16,4 +16,4 @@ jobs:
         with:
           REMOTE: 'git@github.com:EpitechPromo2027/G-EIP-600-RUN-6-1-eip-clement-antoine.xavier.git'
           GIT_SSH_PRIVATE_KEY: ${{ secrets.GIT_SSH_PRIVATE_KEY }}
-          GIT_SSH_KNOWN_HOSTS: ${{ secrets.GIT_SSH_KNOWN_HOSTS }}
+          GIT_SSH_NO_VERIFY_HOST: "true"
