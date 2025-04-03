@@ -84,10 +84,3 @@ docker-compose down
 
 - You can modify the `nginx.conf` file to adjust the configuration of the Nginx reverse proxy.
 - For each service, you can change the `POSTGRES_URL` to point to the appropriate PostgreSQL database.
-
----
-
-Feel free to explore and modify this setup to suit your needs! 😊
-```
-
-This version adds a bit of polish with headings, icons, and consistent formatting. It should be easier to read and navigate!
