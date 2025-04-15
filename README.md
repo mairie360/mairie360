@@ -1,86 +1,92 @@
-# Mairie360
+# Mairie360 – Production Stack
 
-Welcome to the **Mairie360**! This repository contains the Docker Compose configuration for the Mairie360 application, which includes various services such as core, files, calendars, emails, projects, and messages. Additionally, PostgreSQL and Redis are used as dependencies for data management and caching.
+This repository contains the **production-ready** Docker Compose setup for running the [Mairie360](https://github.com/mairie360) platform.
 
-## 🚀 Services
+All services are prebuilt and configured to work together using containerized PostgreSQL, Redis, microservices, and NGINX as a reverse proxy.
 
-- **Core**: The central service responsible for handling business logic and essential operations.
-- **Files**: Manages file storage and access.
-- **Calendars**: Handles all calendar-related functionalities.
-- **Emails**: Manages email services.
-- **Projects**: Manages project-related operations.
-- **Messages**: Handles messaging services.
-- **PostgreSQL**: Relational database used for storing structured data.
-- **Redis**: In-memory data store used for caching and message brokering.
-- **Nginx**: A reverse proxy that serves as the frontend for other services.
+---
 
-## 🔧 Configuration
+## Overview
 
-### Volumes
-- **`postgres-data`**: Persists PostgreSQL data.
-- **`redis-data`**: Persists Redis data.
+This stack is designed to **showcase the production result** of the Mairie360 platform.
 
-### Networks
-- **`backend`**: Network for communication between backend services.
-- **`frontend`**: Network for communication with the frontend (e.g., Nginx).
+### Included Services:
 
-### Environment Variables
-The following common environment variables are defined under `x-common-env` and shared across services:
+- `PostgreSQL` – Persistent relational database
+- `Redis` – In-memory data store
+- `Core` – The module orchestrator
+- `Files` – Files management module
+- `Calendars` – Calendar management
+- `Emails` – Email management module
+- `Projects` – Project management module
+- `Messages` – Message management module
+- `NGINX` – Reverse proxy for exposing services over HTTP
 
-- **`HOSTNAME`**: The hostname for the services.
-- **`PORT`**: The port on which the services run.
-- **`REDIS_URL`**: URL for connecting to the Redis service.
-- **`CORE_PUBLIC_URL`**: URL for accessing the core service.
+---
 
-### Healthchecks
-All services have healthchecks to ensure they are running smoothly. For example, the healthcheck for the **core** service is defined as:
+## Getting Started
 
-```yaml
-healthcheck:
-  test: ["CMD", "curl", "-f", "http://localhost:3000"]
-  interval: 10s
-  timeout: 5s
-  retries: 5
-```
-
-## 🛠️ Setup
-
-### 1. Clone the repository:
+### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/mairie360/mairie360.git
-```
-
-### 2. Navigate to the directory:
-
-```bash
 cd mairie360
 ```
+---
 
-### 3. Start the services:
+### 3. Start the Stack
+
+To deploy the full production environment:
 
 ```bash
 docker compose up
 ```
 
-This command will launch all the services in detached mode.
+All images are pulled from the GitHub Container Registry and set to auto-restart on failure.
 
-### 3. Access the services:
+---
 
-- **Nginx (frontend)**: [http://development.mairie360.fr](http://development.mairie360.com)
+## Accessing the Platform
 
-### 4. Stop the services:
+By default, the stack exposes everything through NGINX on port **80**.
+
+Open `http://development.mairie360.fr` to access the platform.
+
+---
+
+## Health Monitoring
+
+Each service is monitored via built-in Docker healthchecks. To verify:
 
 ```bash
-docker-compose down
+docker compose ps
 ```
 
-## ⚙️ Service Dependencies
+All services should be marked as `healthy`.
 
-- All services depend on **PostgreSQL** and **Redis** being healthy before they start.
-- **Nginx** waits for the **files**, **calendars**, **emails**, **projects**, and **messages** services to be healthy before it starts.
+---
 
-## 🛠️ Customization
+## Updating the Stack
 
-- You can modify the `nginx.conf` file to adjust the configuration of the Nginx reverse proxy.
-- For each service, you can change the `POSTGRES_URL` to point to the appropriate PostgreSQL database.
+To update all services with the latest images:
+
+```bash
+docker compose pull
+docker compose up -d
+```
+
+---
+
+## Shutting Down
+
+To stop all services:
+
+```bash
+docker compose down
+```
+
+To remove volumes as well (will delete all data):
+
+```bash
+docker compose down -v
+```
