@@ -9,9 +9,9 @@ jobs:
   mirror:
     runs-on: ubuntu-latest
     steps:
-      - name: Abort if not the source repository
-        if: github.repository == 'EpitechPromo2027/G-EIP-600-RUN-6-1-eip-clement-antoine.xavier'
-        run: exit 0
+      - name: Remove .github folder from the repository
+        run: |
+          rm -rf .github
       - uses: actions/checkout@v4.2.2
         with:
           fetch-depth: 0
