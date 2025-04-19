@@ -15,8 +15,8 @@ This stack is designed to **showcase the production result** of the Mairie360 pl
 - `PostgreSQL` – Persistent relational database
 - `Redis` – In-memory data store
 - `Core` – The module orchestrator
-- `Files` – Files management module
-- `Calendars` – Calendar management
+- `Files` – File management module
+- `Calendars` – Calendar management module
 - `Emails` – Email management module
 - `Projects` – Project management module
 - `Messages` – Message management module
